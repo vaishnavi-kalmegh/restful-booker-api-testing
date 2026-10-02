@@ -1,0 +1,29 @@
+{
+  "reportType": "Newman execution status",
+  "collection": "Restful-Booker API Automation",
+  "status": "NOT_EXECUTED",
+  "execution": {
+    "environment": "Restful-Booker QA Environment",
+    "target": "https://restful-booker.herokuapp.com",
+    "reason": "The current execution environment could not resolve the public Restful-Booker hostname and Newman is not installed locally.",
+    "command": "./newman/run-newman.sh"
+  },
+  "coverage": {
+    "authentication": 2,
+    "get": 3,
+    "post": 2,
+    "put": 2,
+    "delete": 3,
+    "total_requests": 12
+  },
+  "assertion_categories": [
+    "status code",
+    "response time < 3000 ms",
+    "required response fields",
+    "response data consistency",
+    "negative authentication",
+    "negative missing required field",
+    "post-delete verification"
+  ],
+  "note": "No pass/fail results are fabricated. Run the supplied Newman script in an environment with outbound network access and Newman installed."
+}
