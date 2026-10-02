@@ -129,7 +129,8 @@
                   "pm.test('Response time < 3000 ms',()=>pm.expect(pm.response.responseTime).to.be.below(3000));",
                   "const j=pm.response.json();",
                   "pm.test('Response is array',()=>pm.expect(j).to.be.an('array'));",
-                  "if(j.length) pm.test('First item has bookingid',()=>pm.expect(j[0].bookingid).to.be.a('number'));"
+                  "if(j.length) pm.test('First item has bookingid',()=>pm.expect(j[0].bookingid).to.be.a('number'));",
+                  "pm.environment.set(\"bookingId\", pm.response.json()[0].bookingid);"
                 ]
               }
             }
