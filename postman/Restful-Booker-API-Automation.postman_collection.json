@@ -130,7 +130,7 @@
                   "const j=pm.response.json();",
                   "pm.test('Response is array',()=>pm.expect(j).to.be.an('array'));",
                   "if(j.length) pm.test('First item has bookingid',()=>pm.expect(j[0].bookingid).to.be.a('number'));",
-                  "pm.environment.set(\"bookingId\", pm.response.json()[0].bookingid);"
+                  "if (j.length > 0) { pm.environment.set('bookingId', String(j[0].bookingid)); }"
                 ]
               }
             }
