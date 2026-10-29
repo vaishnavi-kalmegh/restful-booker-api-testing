@@ -45,6 +45,12 @@ The HTML report is written to `newman/final-run-report.html`. The script can als
 
 The suite calls a public demo API, so results can vary with service availability and shared demo data. Do not run against production systems or use real credentials.
 
+## Continuous integration
+
+GitHub Actions runs the Newman collection on pushes to `main`, pull requests targeting `main`, and manual workflow dispatches. The HTML report is uploaded as a workflow artifact even when an assertion fails, so failures remain visible rather than being silently treated as success.
+
+The known missing-`firstname` regression currently expects a 4xx response and may fail against the public demo API's observed 500 response. A failing workflow is therefore an honest signal to investigate; it should not be described as a green test run.
+
 ## Known API behaviour / defect
 
 The last recorded run on 2 October 2026 contained 12 requests and 41 assertions: 40 passed and 1 failed. The failing regression check is intentional: sending `POST /booking` without `firstname` returned `500 Internal Server Error`, while a client-side validation error (4xx) is expected. This is a defect finding, not a passing test.
