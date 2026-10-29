@@ -1,0 +1,13 @@
+{
+  "name": "restful-booker-api-testing",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Postman and Newman API testing portfolio project for Restful-Booker",
+  "scripts": {
+    "test:api": "newman run postman/Restful-Booker-API-Automation.postman_collection.json -e postman/Restful-Booker-Environment.postman_environment.json --reporters cli,htmlextra --reporter-htmlextra-export newman/final-run-report.html"
+  },
+  "devDependencies": {
+    "newman": "^6.2.1",
+    "newman-reporter-htmlextra": "^1.23.1"
+  }
+}
