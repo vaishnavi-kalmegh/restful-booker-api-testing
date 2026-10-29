@@ -1,58 +1,66 @@
 # Restful-Booker API Testing — Postman + Newman
 
-A QA API automation package covering authentication and CRUD operations against Restful-Booker.
+A manual and automated API-testing portfolio project using the public [Restful-Booker demo API](https://restful-booker.herokuapp.com/). The collection covers authentication, booking CRUD, negative cases, response validation, and deletion verification.
 
-## Coverage
-- POST /auth — valid and invalid credentials
-- GET /booking — list bookings
-- GET /booking/{id} — read created booking and nonexistent ID
-- POST /booking — create valid booking and missing-field negative case
-- PUT /booking/{id} — valid update and invalid-token negative case
-- DELETE /booking/{id} — valid delete, invalid-token negative case, post-delete verification
+## Test coverage
 
-## Automated checks
-- HTTP status codes
-- response time < 3000 ms
-- required fields/types
-- request/response consistency
-- missing-field validation
-- invalid-token rejection
+| Area | Coverage |
+|---|---|
+| Authentication | Valid credentials; invalid credentials and token handling |
+| Read | List bookings; retrieve a booking; nonexistent booking ID |
+| Create | Valid booking; missing required field |
+| Update | Valid update; invalid-token rejection |
+| Delete | Valid deletion; invalid-token rejection; verify deleted booking is no longer found |
 
-## Latest run results
+## Assertions
 
-- Requests: 12 (0 failed)
-- Assertions: 41 (40 passed, 1 failed)
-- Total duration: 5.7s
-- Average response time: 326ms (min 204ms, max 963ms)
-- Report: newman/final-run-report.html
+- Expected HTTP status codes for each scenario
+- Response time below 3,000 ms
+- Response body fields and data types
+- Created/updated values match the request
+- Invalid tokens are rejected
+- Deleted booking is no longer retrievable
 
-## Defect found
+## Run locally
 
-POST /booking with the firstname field missing returns 500 Internal Server Error. Expected a 4xx client error (400 or 422). The assertion "Missing required field is rejected" is intentionally left failing to reflect this.
+Requirements: Node.js and npm.
 
-## Other observations
+Install the project's local test dependencies:
 
-- POST /auth with invalid credentials returns 200 OK with a reason message instead of 401.
-- DELETE /booking/{id} returns 201 Created, where 200 or 204 would be expected.
-
-Tests accept the current behaviour.
-
-## How to run
-
-### Windows
-
-1. Install Node.js.
-2. Install Newman and the HTML extra reporter:
-   ```bash
-   npm install -g newman newman-reporter-htmlextra
-   ```
-3. Run the collection:
-   ```bash
-   newman run postman\Restful-Booker-API-Automation.postman_collection.json -e postman\Restful-Booker-Environment.postman_environment.json -r cli,htmlextra --reporter-htmlextra-export newman\final-run-report.html
-   ```
-
-## Run with Newman
 ```bash
-npm install -g newman
+npm install
+```
+
+Run the collection and generate an HTML report:
+
+```bash
+npm run test:api
+```
+
+The HTML report is written to `newman/final-run-report.html`. The script can also be run in WSL/Linux:
+
+```bash
 ./newman/run-newman.sh
 ```
+
+The suite calls a public demo API, so results can vary with service availability and shared demo data. Do not run against production systems or use real credentials.
+
+## Known API behaviour / defect
+
+The last recorded run on 2 October 2026 contained 12 requests and 41 assertions: 40 passed and 1 failed. The failing regression check is intentional: sending `POST /booking` without `firstname` returned `500 Internal Server Error`, while a client-side validation error (4xx) is expected. This is a defect finding, not a passing test.
+
+Other observed behaviours in that run:
+- Invalid credentials on `POST /auth` returned `200 OK` with a reason message and no token.
+- `DELETE /booking/{id}` returned `201 Created`.
+
+These observations are tied to that run and may change because the API is a public demo service. Re-run the suite before quoting current results. The committed HTML report is a historical artifact, not proof of a fresh run.
+
+## Repository contents
+
+- `postman/` — Postman collection and environment
+- `newman/` — command-line runner and saved HTML report
+- `package.json` — local Newman dependencies and test command
+
+## Portfolio note
+
+This project demonstrates API test design, positive and negative scenarios, reusable environment variables, response assertions, automated execution, and defect reporting.
